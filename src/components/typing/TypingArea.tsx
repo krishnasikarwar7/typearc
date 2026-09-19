@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef } from "react";
 import { TypingText } from "./TypingText";
 import type { CharState } from "@/types";
 import { cn } from "@/lib/utils";
@@ -36,7 +36,11 @@ export function TypingArea({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (autoFocus) inputRef.current?.focus();
+    // Do not summon the software keyboard merely by navigating to a page.
+    // Physical-keyboard devices retain the convenient autofocus behavior.
+    if (autoFocus && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      inputRef.current?.focus();
+    }
   }, [autoFocus]);
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
@@ -49,6 +53,25 @@ export function TypingArea({
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
       if (typed.length < text.length) onType(e.key);
+    }
+  }
+
+  function handleInput(e: FormEvent<HTMLInputElement>) {
+    const input = e.currentTarget;
+    const nativeEvent = e.nativeEvent as InputEvent;
+    if (nativeEvent.inputType?.startsWith("delete")) {
+      onBackspace();
+      input.value = "";
+      return;
+    }
+    // Mobile software keyboards commonly bypass keydown and only emit input.
+    // Process the submitted characters then clear the capture field.
+    const inserted = input.value;
+    if (inserted) {
+      for (const char of inserted) {
+        if (char.length === 1 && typed.length < text.length) onType(char);
+      }
+      input.value = "";
     }
   }
 
@@ -67,7 +90,9 @@ export function TypingArea({
         aria-label="Typing input"
         value=""
         onChange={() => {}}
+        onInput={handleInput}
         onKeyDown={handleKeyDown}
+        inputMode="text"
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"

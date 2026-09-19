@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useMemo, useRef } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import type { CharState } from "@/types";
 
@@ -30,7 +30,7 @@ export function CodeEditor({ code, charState, typedLength, onType, onBackspace, 
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -67,6 +67,23 @@ export function CodeEditor({ code, charState, typedLength, onType, onBackspace, 
     }
   }
 
+  function handleInput(e: FormEvent<HTMLInputElement>) {
+    const input = e.currentTarget;
+    const nativeEvent = e.nativeEvent as InputEvent;
+    if (nativeEvent.inputType?.startsWith("delete")) {
+      onBackspace();
+      input.value = "";
+      return;
+    }
+    const inserted = input.value;
+    if (inserted) {
+      for (const char of inserted) {
+        if (typedLength < code.length) onType(char);
+      }
+      input.value = "";
+    }
+  }
+
   const lines = useMemo(() => code.split("\n"), [code]);
   let globalIndex = 0;
 
@@ -85,7 +102,9 @@ export function CodeEditor({ code, charState, typedLength, onType, onBackspace, 
         aria-label="Code typing input"
         value=""
         onChange={() => {}}
+        onInput={handleInput}
         onKeyDown={handleKeyDown}
+        inputMode="text"
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"
