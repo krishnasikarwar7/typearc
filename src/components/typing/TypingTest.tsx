@@ -42,9 +42,9 @@ function heroTextForDuration(duration: TestDuration, index: number) {
 }
 
 const FONT_SIZE_CLASSES: Record<FontSize, string> = {
-  small: "text-[clamp(1rem,2.1vw,1.375rem)]",
-  medium: "text-[clamp(1.125rem,2.5vw,1.625rem)]",
-  large: "text-[clamp(1.25rem,2.8vw,1.75rem)]",
+  small: "text-[1.125rem] sm:text-[clamp(1rem,2.1vw,1.375rem)]",
+  medium: "text-[1.25rem] sm:text-[clamp(1.125rem,2.5vw,1.625rem)]",
+  large: "text-[1.375rem] sm:text-[clamp(1.25rem,2.8vw,1.75rem)]",
 };
 
 export function TypingTest({ hero = false }: { hero?: boolean }) {
@@ -188,6 +188,7 @@ export function TypingTest({ hero = false }: { hero?: boolean }) {
             onBackspace={engine.backspace}
             showCaret={preferences.typingCaret}
             textClassName={hero ? FONT_SIZE_CLASSES[preferences.fontSize] : undefined}
+            className={hero ? "h-[248px] sm:h-[300px]" : undefined}
           />
           {!hero && <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             <Button variant="secondary" size="sm" onClick={handleRestart}>
