@@ -38,7 +38,7 @@ export function Home() {
             <Link to="/coder" className="transition-colors hover:text-accent-2">Coder</Link>
             <Link to="/leaderboard" className="transition-colors hover:text-accent-2">Leaderboard</Link>
           </nav>
-          <p className="shrink-0 text-[10px] text-text-muted sm:text-xs"><span className="sm:hidden">© 2026 · <a href="https://krishnasikarwar.vercel.app/" target="_blank" rel="noreferrer" className="font-medium text-accent-2 transition-colors hover:text-text-primary">Krishna Sikarwar</a></span><span className="hidden sm:inline">© 2026 TypeArc · Built by <a href="https://krishnasikarwar-portfolio.vercel.app/" target="_blank" rel="noreferrer" className="font-medium text-accent-2 transition-colors hover:text-text-primary">Krishna Sikarwar</a></span></p>
+          <p className="shrink-0 text-[10px] text-text-muted sm:text-xs"><span className="sm:hidden">© 2026 · <a href="https://krishnaikarwar.vercel.app/" target="_blank" rel="noreferrer" className="font-medium text-accent-2 transition-colors hover:text-text-primary">Krishna Sikarwar</a></span><span className="hidden sm:inline">© 2026 TypeArc · Built by <a href="https://krishnasikarwar-portfolio.vercel.app/" target="_blank" rel="noreferrer" className="font-medium text-accent-2 transition-colors hover:text-text-primary">Krishna Sikarwar</a></span></p>
         </div>
       </footer>
     </div>
